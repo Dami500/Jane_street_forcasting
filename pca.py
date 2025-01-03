@@ -15,7 +15,6 @@ warnings.filterwarnings('ignore')
 def reduce_dimensionality(df)->list:
     df.fillna(0, inplace = True)
     df = df.iloc[:, 4:83]
-    numeric_df = df.select_dtypes(include=['float32', 'int8', 'int16'])
     scaler = StandardScaler()
     scaled = scaler.fit_transform(df)
     pca = PCA(n_components=0.95, random_state=42)  # Retaining 95% variance
