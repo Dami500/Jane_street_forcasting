@@ -25,15 +25,16 @@ def reduce_dimensionality(df)->list:
    	 print(f"Top features for PC{i+1}:")
    	 top_features = np.argsort(component)[::-1]
    	 print(df.columns[top_features[ :10]])
+
    #plt.figure(figsize=(8, 5))
    #plt.bar(range(1, len(explained_variance_ratio) + 1), explained_variance_ratio, alpha=0.5, align='center', label='Individual explained variance')
    #plt.show()
-    umap_model = umap.UMAP(n_components=2)
-    embeddings = umap_model.fit_transform(pca_transformed)
-    print(embeddings)
-    embeddings_df = pd.DataFrame(embeddings, columns=['UMAP1', 'UMAP2'])
-    feature_correlations = data.corrwith(embeddings_df['UMAP1'])
-    print(feature_correlations.sort_values(ascending=False).head())
+   # umap_model = umap.UMAP(n_components=2)
+    #embeddings = umap_model.fit_transform(pca_transformed)
+   # print(embeddings)
+   # embeddings_df = pd.DataFrame(embeddings, columns=['UMAP1', 'UMAP2'])
+   # feature_correlations = data.corrwith(embeddings_df['UMAP1'])
+   # print(feature_correlations.sort_values(ascending=False).head())
 
    # plt.scatter(X_umap[:, 0], X_umap[:, 1], s=1, alpha=0.5)
     #plt.title("UMAP Embedding")
