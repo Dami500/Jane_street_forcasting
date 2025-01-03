@@ -19,7 +19,7 @@ def reduce_dimensionality(df)->list:
     scaled = scaler.fit_transform(df)
     pca = PCA(n_components=0.95, random_state=42)  # Retaining 95% variance
     pca_transformed = pca.fit_transform(scaled)
-    print(pca_transformed)
+    print(pca.explained_variance_ratio_)
     feature_importance =np.abs(pca.components_)
     for i, component in enumerate(feature_importance):
    	 print(f"Top features for PC{i+1}:")
