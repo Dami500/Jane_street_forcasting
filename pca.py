@@ -84,3 +84,11 @@ df_filtered = df.copy()
 for i, cond in enumerate(conditions): 
     df_filtered = df_filtered[cond] 
 print(df_filtered.index)
+
+# important = Index(['feature_12', 'feature_14', 'feature_15', 'feature_17', 'feature_19',
+#        'feature_22', 'feature_23', 'feature_24', 'feature_25', 'feature_29',
+#        'feature_30', 'feature_32', 'feature_34', 'feature_35', 'feature_37',
+#        'feature_38', 'feature_47', 'feature_58', 'feature_61', 'feature_62',
+#        'feature_67', 'feature_69', 'feature_70', 'feature_72', 'feature_73',
+#        'feature_74', 'feature_75', 'feature_76', 'feature_77', 'feature_78'],
+#       dtype='object')
