@@ -11,20 +11,38 @@ import pyarrow.parquet as pq
 import warnings
 
 warnings.filterwarnings('ignore')
-
-def reduce_dimensionality(df)->list:
-    df.fillna(0, inplace = True)
+def reduce_dimensionality(df) -> list:
+    df.fillna(0, inplace=True)
     df = df.iloc[:, 4:83]
+    
+    # Scale the data
     scaler = StandardScaler()
     scaled = scaler.fit_transform(df)
-    pca = PCA(n_components=0.95, random_state=42)  # Retaining 95% variance
+    
+    # Apply PCA to retain 95% variance
+    pca = PCA(n_components=0.95, random_state=42)
     pca_transformed = pca.fit_transform(scaled)
-    print(pca.explained_variance_ratio_)
-    feature_importance =np.abs(pca.components_)
-    for i, component in enumerate(feature_importance):
-   	 print(f"Top features for PC{i+1}:")
-   	 top_features = np.argsort(component)[::-1]
-   	 print(df.columns[top_features[ :10]])
+    
+    # Get explained variance ratios
+    ratios = pca.explained_variance_ratio_
+    allowed = []
+    for r in ratios:
+        if r >= 0.03:  # Include components explaining at least 3% variance
+            allowed.append(r)
+    
+   # print(allowed)
+   # print(np.sum(allowed))
+    
+    # Determine feature importance for each significant principal component
+    feature_importance = np.abs(pca.components_)
+    features = []
+    for i, component in enumerate(feature_importance[:len(allowed)]):
+    #    print(f"Top features for PC{i + 1}:")
+        top_features = np.argsort(component)[::-1]  # Sort features by importance
+        t = list(df.columns[top_features[:10]])  # Get top 10 features
+        for f in t:
+            features.append(f)
+    return features
 
    #plt.figure(figsize=(8, 5))
    #plt.bar(range(1, len(explained_variance_ratio) + 1), explained_variance_ratio, alpha=0.5, align='center', label='Individual explained variance')
@@ -47,6 +65,25 @@ train = ['/mnt/disk2/train.parquet/partition_id=3/part-0.parquet',
 '/mnt/disk2/train.parquet/partition_id=1/part-0.parquet', '/mnt/disk2/train.parquet/partition_id=0/part-0.parquet',
 '/mnt/disk2/train.parquet/partition_id=7/part-0.parquet', '/mnt/disk2/train.parquet/partition_id=2/part-0.parquet',
 '/mnt/disk2/train.parquet/partition_id=9/part-0.parquet']
-data = pd.read_parquet(train[1])
-reduce_dimensionality(data)
-
+dictionary = {}
+for i in range(len(train)):
+	data  = pd.read_parquet(train[i])
+#	print('Explained Variance Ratio for parquet %s' % i)
+	features = reduce_dimensionality(data)
+	dictionary['parquet %s' %i] = features
+#df = pd.DataFrame(dictionary)
+#print(df)
+df = pd.DataFrame.from_dict(dictionary, orient='index').transpose()
+df = df.apply(pd.value_counts)
+df.fillna(0, inplace = True)
+print(df)
+conditions = [ df['parquet 0'] >= 1, df['parquet 1'] >= 1, df['parquet 2'] >= 1, 
+df['parquet 3'] >= 1, df['parquet 4'] >= 1, df['parquet 5'] >= 1, 
+df['parquet 6'] >= 1, df['parquet 7'] >= 1, df['parquet 8'] >= 1, df['parquet 9'] >= 1] 
+# Check the index of each condition
+#for i, cond in enumerate(conditions):
+   # print(f'Condition {i} index: ', cond.index)
+df_filtered = df.copy() 
+for i, cond in enumerate(conditions): 
+    df_filtered = df_filtered[cond] 
+print(df_filtered.index)
