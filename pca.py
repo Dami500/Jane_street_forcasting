@@ -22,9 +22,9 @@ def reduce_dimensionality(df)->list:
     print(pca.explained_variance_ratio_)
     feature_importance =np.abs(pca.components_)
     for i, component in enumerate(feature_importance):
-   	 print(f"Top features for PC{i+1}:")
-   	 top_features = np.argsort(component)[::-1]
-   	 print(df.columns[top_features[ :10]])
+        print(f"Top features for PC{i+1}:")
+        top_features = np.argsort(component)[::-1]
+        print(df.columns[top_features[ :10]])
 
    #plt.figure(figsize=(8, 5))
    #plt.bar(range(1, len(explained_variance_ratio) + 1), explained_variance_ratio, alpha=0.5, align='center', label='Individual explained variance')
