@@ -43,7 +43,6 @@ def reduce_dimensionality(df) -> list:
         for f in t:
             features.append(f)
     return features
-
    #plt.figure(figsize=(8, 5))
    #plt.bar(range(1, len(explained_variance_ratio) + 1), explained_variance_ratio, alpha=0.5, align='center', label='Individual explained variance')
    #plt.show()
@@ -81,8 +80,6 @@ conditions = [ df['parquet 0'] >= 1, df['parquet 1'] >= 1, df['parquet 2'] >= 1,
 df['parquet 3'] >= 1, df['parquet 4'] >= 1, df['parquet 5'] >= 1, 
 df['parquet 6'] >= 1, df['parquet 7'] >= 1, df['parquet 8'] >= 1, df['parquet 9'] >= 1] 
 # Check the index of each condition
-#for i, cond in enumerate(conditions):
-   # print(f'Condition {i} index: ', cond.index)
 df_filtered = df.copy() 
 for i, cond in enumerate(conditions): 
     df_filtered = df_filtered[cond] 
